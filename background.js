@@ -6,16 +6,19 @@
 let title = browser.i18n.getMessage('title');
 let maxTabs = 10;
 let includePinned = false;
+let showNotifications = true;
 let colorScale = chroma.scale(['#A6A6A6', '#B90000']);
 
 function updatePrefs() {
   return new Promise((resolve, reject) => {
     browser.storage.sync.get({
       "maxTabs": 10,
-      "includePinned": false
+      "includePinned": false,
+      "showNotifications": true,
     }, items => {
       maxTabs = items.maxTabs;
       includePinned = items.includePinned;
+      showNotifications = items.showNotifications;
       resolve();
     });
   });
@@ -50,11 +53,13 @@ browser.tabs.onCreated.addListener(tab => {
     queryNumTabs().then(numTabs => {
       if (numTabs > maxTabs) {
         browser.tabs.remove(tab.id).then(() => {
-          browser.notifications.create("", {
-            type: "basic",
-            title: title,
-            message: browser.i18n.getMessage('notOpenMaxTabs', maxTabs)
-          });
+          if(showNotifications) {
+            browser.notifications.create("", {
+              type: "basic",
+              title: title,
+              message: browser.i18n.getMessage('notOpenMaxTabs', maxTabs)
+            });
+          }
         });
       } else {
         updateButton(numTabs);
