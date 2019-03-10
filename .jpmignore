@@ -7,14 +7,6 @@ node_modules\.bin
 node_modules\jpm
 .jpmignore
 
-# Chroma-js files
-node_modules\chroma-js\src
-node_modules\chroma-js\test
-node_modules\chroma-js\bower.json
-node_modules\chroma-js\.npmignore
-node_modules\chroma-js\Gruntfile.js
-node_modules\chroma-js\chroma.min.js
-
 # Others
 art
 *.xpi

@@ -2,11 +2,19 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-/*global browser, chroma */
+/*global browser */
 let title = browser.i18n.getMessage('title');
 let maxTabs = 10;
 let includePinned = false;
-let colorScale = chroma.scale(['#A6A6A6', '#B90000']);
+let [grey, red] = ['#A6A6A6', '#B90000'];
+
+function getTabCounterBackgroundColor(currentNumberOfTabsOpened) {
+  if (currentNumberOfTabsOpened == maxTabs) {
+    return red;
+  } else {
+    return grey;
+  }
+}
 
 function updatePrefs() {
   return new Promise((resolve, reject) => {
@@ -29,7 +37,7 @@ function updateButton(numTabs) {
     text: numTabs > 99 ? '99+' : numTabs.toString()
   });
   browser.browserAction.setBadgeBackgroundColor({
-    color: colorScale(numTabs/maxTabs).hex()
+    color: getTabCounterBackgroundColor(numTabs),
   });
 }
 
