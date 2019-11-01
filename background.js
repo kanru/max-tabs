@@ -6,16 +6,19 @@
 let title = browser.i18n.getMessage('title');
 let maxTabs = 10;
 let includePinned = false;
+let includeAllWindows = false;
 let colorScale = chroma.scale(['#A6A6A6', '#B90000']);
 
 function updatePrefs() {
   return new Promise((resolve, reject) => {
     browser.storage.sync.get({
       "maxTabs": 10,
-      "includePinned": false
+      "includePinned": false,
+      "includeAllWindows": false
     }, items => {
       maxTabs = items.maxTabs;
       includePinned = items.includePinned;
+      includeAllWindows = items.includeAllWindows;
       resolve();
     });
   });
@@ -35,7 +38,7 @@ function updateButton(numTabs) {
 
 async function queryNumTabs() {
   let tabs = await browser.tabs.query({
-    currentWindow: true,
+    currentWindow: includeAllWindows ? null : true,
     pinned: includePinned ? null : false
   });
   return tabs.length;
